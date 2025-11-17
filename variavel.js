@@ -1,9 +1,12 @@
 const formu = {email: () => document.getElementById("email")}
 
-function names() {
-    nome = formu.email().value;
+export function names() {
+    const formu = { email: () => document.getElementById("email") };
+
+    const nome = formu.email().value;
     console.log(nome);
     return nome;
 }
+
 
 dono = names();
