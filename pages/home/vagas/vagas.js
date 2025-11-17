@@ -1,4 +1,4 @@
-import { names } from "../../../variavel";
+import { names } from "../../../variavel.js";
 
 window.names = names;
 //----------------------------------------------------------------------------------
@@ -206,5 +206,6 @@ function renderSpots() {
 renderSpots();
 
 updateStats();
+
 
 
