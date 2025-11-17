@@ -1,0 +1,270 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+    min-height: 100vh;
+    padding: 2rem;
+    color: white;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.header-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.header-title svg {
+    width: 40px;
+    height: 40px;
+    color: #60a5fa;
+}
+
+.header-subtitle {
+    color: #94a3b8;
+    font-size: 0.95rem;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    padding: 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.stat-card.disponivel {
+    background: rgba(34, 197, 94, 0.1);
+    border-color: rgba(34, 197, 94, 0.2);
+    color: #4ade80;
+}
+
+.stat-card.reservada {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: rgba(239, 68, 68, 0.2);
+    color: #f87171;
+}
+
+.stat-card.ocupada {
+    background: rgba(100, 116, 139, 0.1);
+    border-color: rgba(100, 116, 139, 0.2);
+    color: #94a3b8;
+}
+
+.stat-count {
+    font-size: 1.5rem;
+    color: white;
+}
+
+.parking-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1rem;
+}
+
+.parking-spot {
+    border: 2px solid;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    transition: all 0.3s ease;
+}
+
+.parking-spot.disponivel {
+    background: rgba(34, 197, 94, 0.2);
+    border-color: #22c55e;
+}
+
+.parking-spot.reservada {
+    background: rgba(239, 68, 68, 0.2);
+    border-color: #ef4444;
+}
+
+.parking-spot.ocupada {
+    background: rgba(100, 116, 139, 0.2);
+    border-color: #64748b;
+}
+
+.spot-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.spot-header svg {
+    width: 32px;
+    height: 32px;
+}
+
+.parking-spot.disponivel .spot-header svg,
+.parking-spot.disponivel .spot-number {
+    color: #22c55e;
+}
+
+.parking-spot.reservada .spot-header svg,
+.parking-spot.reservada .spot-number {
+    color: #ef4444;
+}
+
+.parking-spot.ocupada .spot-header svg,
+.parking-spot.ocupada .spot-number {
+    color: #64748b;
+}
+
+.spot-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    font-size: 0.875rem;
+    transition: all 0.2s;
+    font-weight: 500;
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn-reservar {
+    background: #2563eb;
+    color: white;
+}
+
+.btn-reservar:hover:not(:disabled) {
+    background: #1d4ed8;
+}
+
+.btn-liberar {
+    background: transparent;
+    border: 1px solid #94a3b8;
+    color: white;
+}
+
+.btn-liberar:hover:not(:disabled) {
+    background: rgba(148, 163, 184, 0.1);
+}
+
+header {
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    font-size: var(--font-size-xl);
+}
+
+/* Estilo da navegação com caixa ao redor de cada link */
+header nav {
+    display: flex;
+    gap: 1rem;
+}
+
+header nav a {
+    display: inline-block;
+    color: var(--secondary-color);
+    text-decoration: none;
+    font-size: var(--font-size-lg);
+    padding: 0.8rem 1.5rem; /* Espaçamento interno da caixa */
+    background-color: var(--box-bg-color);
+    border: 2px solid var(--box-border-color);
+    border-radius: 8px;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Hover para os links */
+header nav a:hover {
+    background-color: var(--box-hover-bg-color);
+    border-color: var(--accent-color);
+}
+
+nav a[href="#home"]:disabled {
+    pointer-events: none; /* Impede que o link seja clicado */
+    color: grey; /* Muda a cor do link para indicar que está desabilitado */
+}
+
+/* Estilo para o link ativo */
+nav a.active {
+    color: #fff; /* Cor do texto quando ativo */
+    background-color: transparent; /* Cor de fundo para indicar que está ativo */
+    pointer-events: none; /* Impede interação com o botão ativo */
+    cursor: not-allowed; /* Muda o cursor para indicar que o link não pode ser clicado */
+}
+
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 1.5rem;
+    }
+
+    header nav {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    header h1 {
+        font-size: 1.2rem;
+    }
+
+    header nav {
+        font-size: 14px;
+        gap: 0.5rem;
+    }
+}
+
+:root {
+    --primary-color: #333;
+    --secondary-color: #fff;
+    --accent-color: #4CAF50; /* Verde */
+    --font-size-base: 16px;
+    --font-size-lg: 18px;
+    --font-size-xl: 24px;
+    --button-color: #4CAF50; /* Verde para o botão Reciclável */
+    --button-hover-color: #388E3C; /* Verde mais escuro no hover */
+    --confirm-button-color: #007BFF; /* Azul para o botão confirmar */
+    --confirm-button-hover-color: #0056b3; /* Azul mais escuro no hover */
+    --organico-button-color: #8B4513; /* Marrom para o botão Orgânico */
+    --organico-button-hover-color: #6B2E0E; /* Marrom mais escuro no hover */
+    --box-bg-color: #444; /* Cor da caixa */
+    --box-border-color: #888; /* Cor da borda da caixa */
+    --box-padding: 10px; /* Padding da caixa */
+    --box-hover-bg-color: #555; /* Cor de fundo no hover */
+}

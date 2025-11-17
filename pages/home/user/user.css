@@ -1,0 +1,247 @@
+/* Definindo variáveis de estilo para maior consistência */
+:root {
+    --primary-color: #333;
+    --secondary-color: #fff;
+    --accent-color: #4CAF50; /* Verde */
+    --font-size-base: 16px;
+    --font-size-lg: 18px;
+    --font-size-xl: 24px;
+    --button-color: #4CAF50; /* Verde para os botões */
+    --button-hover-color: #388E3C; /* Verde mais escuro no hover */
+    --box-bg-color: #444; /* Cor da caixa */
+    --box-border-color: #888; /* Cor da borda da caixa */
+}
+
+/* Resetando margens e preenchimentos */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    font-size: var(--font-size-base);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #f4f4f4;
+}
+
+/* Cabeçalho */
+header {
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    font-size: var(--font-size-xl);
+}
+
+/* Navegação */
+header nav {
+    display: flex;
+    gap: 1rem;
+}
+
+header nav a {
+    display: inline-block;
+    color: var(--secondary-color);
+    text-decoration: none;
+    font-size: var(--font-size-lg);
+    padding: 0.8rem 1.5rem;
+    background-color: var(--box-bg-color);
+    border: 2px solid var(--box-border-color);
+    border-radius: 8px;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+header nav a:hover {
+    background-color: var(--box-bg-color);
+    border-color: var(--accent-color);
+}
+
+nav a.active {
+    color: #fff;
+    background-color: transparent;
+    pointer-events: none;
+    cursor: not-allowed;
+}
+
+/* Conteúdo */
+.content {
+    flex: 1;
+    text-align: center;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+/* Seção de Informações do Usuário */
+.user-info {
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+.user-info h3 {
+    font-size: var(--font-size-lg);
+}
+
+.user-info p {
+    font-size: var(--font-size-base);
+    color: #888;
+}
+
+.edit-button {
+    padding: 0.8rem 1.5rem;
+    background-color: var(--accent-color);
+    color: var(--secondary-color);
+    font-size: var(--font-size-lg);
+    border-radius: 8px;
+    text-decoration: none;
+    display: inline-block;
+    border: none;
+    margin-top: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.edit-button:hover {
+    background-color: #388E3C;
+}
+
+/* Histórico de Compras */
+.purchase-history {
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+.purchase-history h3 {
+    font-size: var(--font-size-lg);
+}
+
+.purchase-history ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.purchase-history li {
+    font-size: var(--font-size-base);
+    color: #888;
+}
+
+.view-more-button {
+    padding: 0.8rem 1.5rem;
+    background-color: var(--button-color);
+    color: var(--secondary-color);
+    font-size: var(--font-size-lg);
+    border-radius: 8px;
+    text-decoration: none;
+    display: inline-block;
+    border: none;
+    margin-top: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.view-more-button:hover {
+    background-color: var(--button-hover-color);
+}
+
+/* Configurações de Conta */
+.account-settings {
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+.account-settings h3 {
+    font-size: var(--font-size-lg);
+}
+
+.account-settings button {
+    padding: 0.8rem 1.5rem;
+    background-color: var(--button-color);
+    color: var(--secondary-color);
+    font-size: var(--font-size-lg);
+    border-radius: 8px;
+    text-decoration: none;
+    display: inline-block;
+    border: none;
+    margin-top: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.account-settings button:hover {
+    background-color: var(--button-hover-color);
+}
+
+/* Rodapé */
+footer {
+    display: flex;
+    justify-content: flex-start;
+    padding: 1rem 2rem;
+    margin-top: auto;
+}
+
+footer img {
+    width: 120px;
+    height: auto;
+}
+
+/* Media queries para responsividade */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 1.5rem;
+    }
+
+    header nav {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .content {
+        padding: 1rem;
+    }
+
+    .user-info, .purchase-history, .account-settings {
+        padding: 1rem;
+    }
+
+    .user-info h3, .purchase-history h3, .account-settings h3 {
+        font-size: 1.2rem;
+    }
+
+    .edit-button, .view-more-button {
+        font-size: 16px;
+        padding: 0.7rem 1.2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    header h1 {
+        font-size: 1.2rem;
+    }
+
+    header nav {
+        font-size: 14px;
+        gap: 0.5rem;
+    }
+
+    .content {
+        padding: 1rem;
+    }
+
+    .user-info h3, .purchase-history h3, .account-settings h3 {
+        font-size: 1.2rem;
+    }
+
+    .edit-button, .view-more-button {
+        font-size: 14px;
+        padding: 0.7rem 1.2rem;
+    }
+}

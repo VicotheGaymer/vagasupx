@@ -1,0 +1,229 @@
+/* Definindo variáveis de estilo para maior consistência */
+:root {
+    --primary-color: #333;
+    --secondary-color: #fff;
+    --accent-color: #4CAF50; /* Verde */
+    --font-size-base: 16px;
+    --font-size-lg: 18px;
+    --font-size-xl: 24px;
+    --button-color: #4CAF50; /* Verde para o botão Reciclável */
+    --button-hover-color: #388E3C; /* Verde mais escuro no hover */
+    --confirm-button-color: #007BFF; /* Azul para o botão confirmar */
+    --confirm-button-hover-color: #0056b3; /* Azul mais escuro no hover */
+    --organico-button-color: #8B4513; /* Marrom para o botão Orgânico */
+    --organico-button-hover-color: #6B2E0E; /* Marrom mais escuro no hover */
+    --box-bg-color: #444; /* Cor da caixa */
+    --box-border-color: #888; /* Cor da borda da caixa */
+    --box-padding: 10px; /* Padding da caixa */
+    --box-hover-bg-color: #555; /* Cor de fundo no hover */
+}
+
+/* Resetando margens e preenchimentos */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    font-size: var(--font-size-base);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #f4f4f4;
+}
+
+header {
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    font-size: var(--font-size-xl);
+}
+
+/* Estilo da navegação com caixa ao redor de cada link */
+header nav {
+    display: flex;
+    gap: 1rem;
+}
+
+header nav a {
+    display: inline-block;
+    color: var(--secondary-color);
+    text-decoration: none;
+    font-size: var(--font-size-lg);
+    padding: 0.8rem 1.5rem; /* Espaçamento interno da caixa */
+    background-color: var(--box-bg-color);
+    border: 2px solid var(--box-border-color);
+    border-radius: 8px;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Hover para os links */
+header nav a:hover {
+    background-color: var(--box-hover-bg-color);
+    border-color: var(--accent-color);
+}
+
+nav a[href="#home"]:disabled {
+    pointer-events: none; /* Impede que o link seja clicado */
+    color: grey; /* Muda a cor do link para indicar que está desabilitado */
+}
+
+/* Estilo para o link ativo */
+nav a.active {
+    color: #fff; /* Cor do texto quando ativo */
+    background-color: transparent; /* Cor de fundo para indicar que está ativo */
+    pointer-events: none; /* Impede interação com o botão ativo */
+    cursor: not-allowed; /* Muda o cursor para indicar que o link não pode ser clicado */
+}
+
+/* Conteúdo principal */
+.content {
+    flex: 1;
+    text-align: center;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2rem;
+}
+
+/* Estilo para os botões principais (Reciclável, Orgânico e Confirmar) */
+.buttons {
+    display: flex;
+    justify-content: center; /* Alinha os botões no centro */
+    gap: 1rem; /* Espaço entre os botões */
+}
+
+.buttons a {
+    padding: 0.8rem 1.5rem;
+    color: var(--secondary-color);
+    text-decoration: none;
+    font-size: var(--font-size-lg);
+    border-radius: 8px;
+    border: none;
+    transition: background-color 0.3s ease; /* Garantir transição suave */
+}
+
+/* Botão Confirmar - cor azul */
+.confirm-button {
+    padding: 0.8rem 1.5rem; /* Igual aos outros botões */
+    background-color: var(--confirm-button-color); /* Azul */
+    color: var(--secondary-color);
+    font-size: var(--font-size-lg); /* Mesmo tamanho de fonte dos outros botões */
+    border-radius: 8px;
+    text-decoration: none;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+    margin-top: auto; /* Garante que o botão fique no final da tela */
+    margin-bottom: 2rem; /* Espaço entre o botão e o rodapé */
+}
+
+.confirm-button:hover {
+    background-color: var(--confirm-button-hover-color); /* Azul mais escuro no hover */
+}
+
+/* Botão Reciclável - cor verde */
+.reciclavel-button {
+    padding: 0.8rem 1.5rem;
+    background-color: var(--button-color); /* Verde */
+    color: var(--secondary-color);
+    font-size: var(--font-size-lg);
+    border-radius: 8px;
+    text-decoration: none;
+    display: inline-block;
+    transition: background-color 0.3s ease; /* Transição suave */
+}
+
+.reciclavel-button:hover {
+    background-color: var(--button-hover-color); /* Verde mais escuro no hover */
+}
+
+/* Botão Orgânico - cor marrom */
+.organico-button {
+    padding: 0.8rem 1.5rem;
+    background-color: var(--organico-button-color); /* Marrom */
+    color: var(--secondary-color);
+    font-size: var(--font-size-lg);
+    border-radius: 8px;
+    text-decoration: none;
+    display: inline-block;
+    transition: background-color 0.3s ease; /* Transição suave */
+}
+
+.organico-button:hover {
+    background-color: var(--organico-button-hover-color); /* Marrom mais escuro no hover */
+}
+
+/* Rodapé */
+footer {
+    display: flex;
+    justify-content: flex-start;
+    padding: 1rem 2rem;
+    margin-top: auto;
+}
+
+footer img {
+    width: 120px;
+    height: auto;
+}
+
+/* Media queries para responsividade */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 1.5rem;
+    }
+
+    header nav {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .content {
+        padding: 1rem;
+    }
+
+    .buttons a {
+        font-size: 16px;
+        padding: 0.8rem 1.5rem;
+    }
+
+    .confirm-button {
+        padding: 0.8rem 1.5rem;
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    header h1 {
+        font-size: 1.2rem;
+    }
+
+    header nav {
+        font-size: 14px;
+        gap: 0.5rem;
+    }
+
+    .content {
+        padding: 1rem;
+    }
+
+    .buttons a {
+        font-size: 14px;
+        padding: 0.7rem 1.2rem;
+    }
+
+    .confirm-button {
+        padding: 0.8rem 1.5rem;
+        font-size: 16px;
+    }
+}

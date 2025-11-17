@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trash-it - Confirmação de Lixo</title>
+    <link rel="stylesheet" href="scan.css">  <!-- Seu arquivo CSS -->
+</head>
+
+<body>
+
+    <header>
+        <h1>Trash-it</h1>
+        <nav>
+            <a href="../home.html">Home</a>
+            <a href="#scan" class="active">Scan</a>
+            <a href="../trade/trade.html">Trade</a>
+            <a href="../user/user.html" class="user">User</a>
+        </nav>
+    </header>
+
+    <div class="content">
+        <h2>Escolha o tipo de material</h2>
+        <div class="buttons">
+            <!-- Botões para selecionar Reciclável ou Orgânico -->
+            <a href="#reciclavel" class="reciclavel-button" onclick="openRecicle()">Reciclável</a>
+            <a href="#organico" class="organico-button" onclick="openOrganic()">Orgânico</a>
+        </div>
+
+        <div class="buttons">
+            <!-- Botão Confirmar que chama as funções de confirmação -->
+            <a href="#confirmar" class="confirm-button" onclick="confirmaLixoReciclavel()">Confirmar Reciclável</a>
+            <a href="#confirmar" class="confirm-button" onclick="confirmaLixoOrganico()">Confirmar Orgânico</a>
+        </div>
+    </div>
+
+    <footer>
+        <img src="../../../img/facens-removebg-preview.png" alt="Logo da Faculdade">
+    </footer>
+    
+<script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-firestore-compat.js"></script>
+<script src="../../../firebase.js"></script>
+<script src="scan.js"></script>
+</body>
+</html>
