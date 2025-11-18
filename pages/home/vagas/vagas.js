@@ -123,61 +123,49 @@ function updateStats() {
     document.getElementById('count-ocupada').textContent = counts.ocupada;
 }
 
-// ---------- HANDLE RESERVAR (verifica dono atual antes de gravar) ----------
 async function handleReservar(id) {
-    try {
-        const urlDono = link + `vaga/0${id}/dono.json`;
-        const urlReservada = link + `vaga/0${id}/reservada.json`; // se usar este campo
-        const currentDono = await http("GET", urlDono);
+    const urlreserva = link + 'vaga/0' + id + '/reservada.json';
+    const atual = await http("GET", urlreserva);
+    const spot = spots.find(s => s.id === id);
+    if (spot && spot.status === 'disponivel' && atual !== true) {
+        spot.status = 'reservada';
+        spot.liberado = false;
+        renderSpots();
+        updateStats();
 
-        if (currentDono && currentDono !== null) {
-            console.log("vaga já tem dono:", currentDono);
-            await renderSpots();
-            return;
-        }
-
-        // grava dono e (se usar) reservada
-        await http("PUT", urlDono, dono);
-        // Se você mantiver o campo reservada no DB, atualize também:
-        // await http("PUT", urlReservada, true);
-
-        console.log("Reserva feita com sucesso por:", dono);
-        await renderSpots();
-    } catch (e) {
-        console.error("erro ao reservar:", e);
+        funcaoexecutar(id);
+    }else if(atual === true) {
+        console.log('vagaocupada nada aconetece');
     }
 }
 
-async function handleLiberar(id) {
-    try {
-        const urlDono = link + `vaga/0${id}/dono.json`;
-        const urlOcup = link + `vaga/0${id}/ocupacao.json`;
-
-        const donoVaga = await http("GET", urlDono);
-        // se não for dono, não faz nada (só re-render)
-        if (!donoVaga || donoVaga !== dono) {
-            console.log("Você não é dono desta vaga.");
-            await renderSpots();
-            return;
+function handleLiberar(id) {
+    const spot = spots.find(s => s.id === id);
+    
+    if (spot) {
+        if (spot.status === 'reservada' && !spot.liberado) {
+            // Primeiro clique em Liberar: continua reservada mas marca como liberado
+            spot.liberado = true;
+            renderSpots();
+            updateStats();
+            
+            // Executa função customizada de liberar
+            funcaoliberar(id);
+        } else if (spot.status === 'reservada' && spot.liberado) {
+            // Segundo clique (Fechar): volta para disponível
+            spot.status = 'disponivel';
+            spot.liberado = false;
+            renderSpots();
+            updateStats();
+            
+            // Executa função customizada de fechar
+            funcaofechar(id);
+        } else if (spot.status === 'ocupada') {
+            spot.status = 'disponivel';
+            spot.liberado = false;
+            renderSpots();
+            updateStats();
         }
-
-        const ocupacao = await http("GET", urlOcup);
-
-        // Regra do Vinicius:
-        // ocupacao === true  -> pino em pé -> botão mostra "Liberar" -> ação: abaixar (set ocupacao = false)
-        // ocupacao === false -> pino abaixado -> botão mostra "Fechar"  -> ação: levantar (set ocupacao = true)
-        if (ocupacao === true) {
-            // chamar a função que já tem (abaixa o pino)
-            await funcaoliberar(id); // essa função faz PUT ocupacao=false
-        } else {
-            // chama a função que levanta o pino e também limpa a flag de reservada (conforme seu código)
-            await funcaofechar(id); // essa função faz PUT ocupacao=true e PUT reservada=false no seu DB
-        }
-
-        // Re-render para atualizar UI após alteração
-        await renderSpots();
-    } catch (e) {
-        console.error("erro no handleLiberar:", e);
     }
 }
 
@@ -191,91 +179,81 @@ function getButtonText(status, liberado) {
 }
 
 async function renderSpots() {
-    try {
-        const vagas = await http("GET", link + "vaga.json") || {};
-        const grid = document.getElementById("parking-grid");
-        grid.innerHTML = "";
+    const vagas = await http("GET", link + "vaga.json"); // pega todas as vagas de uma vez
 
-        // recalcula contadores locais
-        let disponivelCount = 0, reservadaCount = 0, ocupadaCount = 0;
+    const grid = document.getElementById("parking-grid");
+    grid.innerHTML = ""; // limpa antes de renderizar
 
-        for (let i = 1; i <= 10; i++) {
-            const key = "0" + i;
-            const v = vagas[key] || {};
+    for (let i = 1; i <= 10; i++) {
+        const id = "0" + i;
+        const v = vagas[id] || {};
 
-            // valores do Firebase (tratando undefined)
-            const ocupacao = (v.ocupacao === true); // true = pino em pé
-            const donoVaga = v.dono === undefined ? null : v.dono;
-            const reservada = donoVaga !== null; // considera reservada se houver dono
+        const reservada = v.reservada || false;
+        const ocupada = v.ocupacao || false;
+        const donoVaga = v.dono || null;
 
-            // decide status visual
-            let statusClass = "disponivel";
-            if (ocupacao) {
-                statusClass = "ocupada";
-                ocupadaCount++;
-            } else if (reservada) {
-                statusClass = "reservada";
-                reservadaCount++;
-            } else {
-                statusClass = "disponivel";
-                disponivelCount++;
-            }
+        let status = "disponivel";
 
-            const ehDono = donoVaga === dono;
+        if (ocupada === true) status = "ocupada";
+        else if (reservada === true) status = "reservada";
 
-            const spotDiv = document.createElement("div");
-            spotDiv.className = `parking-spot ${statusClass}`;
-            spotDiv.innerHTML = `
-                <div class="spot-header">
-                    ${carIcon}
-                    <span class="spot-number">Vaga ${i}</span>
-                </div>
-                <div class="spot-buttons" id="btn-area-${i}"></div>
-            `;
+        const ehDono = donoVaga === dono;
 
-            const btnArea = spotDiv.querySelector(`#btn-area-${i}`);
+        const spotDiv = document.createElement("div");
+        spotDiv.className = `parking-spot ${status}`;
 
-            // Se ocupada -> nenhum botão
-            if (statusClass === "ocupada") {
-                btnArea.innerHTML = "";
-            }
-            // Se reservada por outro -> nenhum botão (fica vermelha)
-            else if (statusClass === "reservada" && !ehDono) {
-                btnArea.innerHTML = "";
-            }
-            // Se reservada e sou dono -> botão Liberar/Fechar dependendo de ocupacao
-            else if (statusClass === "reservada" && ehDono) {
-                const text = ocupacao ? "Liberar" : "Fechar";
-                // Chamamos handleLiberar para re-verificar estado atual antes de agir
-                btnArea.innerHTML = `<button class="btn-liberar" onclick="handleLiberar(${i})">${text}</button>`;
-            }
-            // Disponível -> botão Reservar
-            else if (statusClass === "disponivel") {
-                btnArea.innerHTML = `<button class="btn-reservar" onclick="handleReservar(${i})">Reservar</button>`;
-            }
+        spotDiv.innerHTML = `
+            <div class="spot-header">
+                ${carIcon}
+                <span class="spot-number">Vaga ${i}</span>
+            </div>
+            <div class="spot-buttons" id="btn-area-${i}"></div>
+        `;
 
-            grid.appendChild(spotDiv);
+        const btnArea = spotDiv.querySelector(`#btn-area-${i}`);
+
+        // ===========================
+        // REGRAS CORRIGIDAS
+        // ===========================
+
+        // 3 — Se dono == null → vaga NÃO está reservada
+        if (donoVaga === null) {
+            status = "disponivel"; 
         }
 
-        // atualiza contadores na tela
-        document.getElementById('count-disponivel').textContent = disponivelCount;
-        document.getElementById('count-reservada').textContent = reservadaCount;
-        document.getElementById('count-ocupada').textContent = ocupadaCount;
-    } catch (err) {
-        console.error("Erro ao renderizar vagas:", err);
+        // Atualiza a classe visual
+        spotDiv.className = `parking-spot ${status}`;
+
+        // BOTÕES
+        if (status === "disponivel") {
+            btnArea.innerHTML = `
+                <button class="btn-reservar" onclick="handleReservar(${i})">Reservar</button>
+            `;
+        }
+
+        else if (status === "reservada" && ehDono) {
+            btnArea.innerHTML = `
+                <button class="btn-liberar" onclick="handleLiberar(${i})">
+                    ${(v.ocupacao === true) ? "Liberar" : "Fechar"}
+                </button>
+            `;
+        }
+
+        else {
+            btnArea.innerHTML = ""; // reservado por outro ou ocupado
+        }
+
+        grid.appendChild(spotDiv);
     }
+
+    updateStats();
 }
 
-async function refreshAll() {
-    await renderSpots();
-}
 
-// Render inicial
-refreshAll();
+// Renderização inicial
+renderSpots();
 
 updateStats();
-
-
 
 
 
