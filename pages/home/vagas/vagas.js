@@ -1,6 +1,8 @@
 const dono = sessionStorage.getItem("emaillogado");
 //----------------------------------------------------------------------------------
 
+function teste(){console.log(dono)}
+
 const link = "https://vagas-fb9c4-default-rtdb.firebaseio.com/";
 
 async function http(method, url, body) {
@@ -206,6 +208,7 @@ function renderSpots() {
 renderSpots();
 
 updateStats();
+
 
 
 
