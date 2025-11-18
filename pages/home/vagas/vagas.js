@@ -179,27 +179,26 @@ function getButtonText(status, liberado) {
 }
 
 async function renderSpots() {
+    const vagas = await http("GET", link + "vaga.json"); // pega todas as vagas de uma vez
+
     const grid = document.getElementById("parking-grid");
-    grid.innerHTML = "";
+    grid.innerHTML = ""; // limpa antes de renderizar
 
     for (let i = 1; i <= 10; i++) {
-        const reservada = await http("GET", link + `vaga/0${i}/reservada.json`);
-        const ocupada = await http("GET", link + `vaga/0${i}/ocupacao.json`);
-        const donoVaga = await http("GET", link + `vaga/0${i}/dono.json`);
+        const id = "0" + i;
+        const v = vagas[id] || {};
+
+        const reservada = v.reservada || false;
+        const ocupada = v.ocupacao || false;
+        const donoVaga = v.dono || null;
 
         let status = "disponivel";
-        let ehDono = null;
 
-        if (reservada === true) {
-            status = "reservada";
-        }
+        if (ocupada === true) status = "ocupada";
+        else if (reservada === true) status = "reservada";
 
-        if (donoVaga === dono) {
-            ehDono = true;
-        }
+        const ehDono = donoVaga === dono;
 
-
-        
         const spotDiv = document.createElement("div");
         spotDiv.className = `parking-spot ${status}`;
 
@@ -208,13 +207,24 @@ async function renderSpots() {
                 ${carIcon}
                 <span class="spot-number">Vaga ${i}</span>
             </div>
-            <div class="spot-buttons" id="btn-area-${i}">
-            </div>
+            <div class="spot-buttons" id="btn-area-${i}"></div>
         `;
 
         const btnArea = spotDiv.querySelector(`#btn-area-${i}`);
 
-        // ---- REGRAS ----
+        // ===========================
+        // REGRAS CORRIGIDAS
+        // ===========================
+
+        // 3 — Se dono == null → vaga NÃO está reservada
+        if (donoVaga === null) {
+            status = "disponivel"; 
+        }
+
+        // Atualiza a classe visual
+        spotDiv.className = `parking-spot ${status}`;
+
+        // BOTÕES
         if (status === "disponivel") {
             btnArea.innerHTML = `
                 <button class="btn-reservar" onclick="handleReservar(${i})">Reservar</button>
@@ -222,26 +232,21 @@ async function renderSpots() {
         }
 
         else if (status === "reservada" && ehDono) {
-            // Dono da vaga pode controlar abrir/fechar
             btnArea.innerHTML = `
                 <button class="btn-liberar" onclick="handleLiberar(${i})">
-                    ${spots[i-1].liberado ? "Fechar" : "Liberar"}
+                    ${(v.ocupacao === true) ? "Liberar" : "Fechar"}
                 </button>
             `;
         }
 
-        // Reservada por outro usuário → nenhum botão
-        else if (status === "reservada" && !ehDono) {
-            btnArea.innerHTML = "";
-        }
-
-        // Ocupada → nada
-        else if (status === "ocupada") {
-            btnArea.innerHTML = "";
+        else {
+            btnArea.innerHTML = ""; // reservado por outro ou ocupado
         }
 
         grid.appendChild(spotDiv);
     }
+
+    updateStats();
 }
 
 
@@ -249,6 +254,7 @@ async function renderSpots() {
 renderSpots();
 
 updateStats();
+
 
 
 
