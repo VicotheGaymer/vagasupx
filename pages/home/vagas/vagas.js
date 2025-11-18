@@ -1,6 +1,4 @@
-import { names } from "../../../variavel.js";
-
-window.names = names;
+const dono = sessionStorage.getItem("emailLogado");
 //----------------------------------------------------------------------------------
 
 const link = "https://vagas-fb9c4-default-rtdb.firebaseio.com/";
@@ -206,6 +204,7 @@ function renderSpots() {
 renderSpots();
 
 updateStats();
+
 
 
 
