@@ -178,38 +178,78 @@ function getButtonText(status, liberado) {
     return 'Fechar';
 }
 
-function renderSpots() {
-    const grid = document.getElementById('parking-grid');
-    grid.innerHTML = spots.map(spot => `
-        <div class="parking-spot ${spot.status}">
+async function renderSpots() {
+    const grid = document.getElementById("parking-grid");
+    grid.innerHTML = "";
+
+    for (let i = 1; i <= 10; i++) {
+
+        // ---- BUSCA DADOS REAIS NO FIREBASE ----
+        const reservada = await http("GET", link + `vaga/0${i}/reservada.json`);
+        const ocupada = await http("GET", link + `vaga/0${i}/ocupacao.json`);
+        const donoVaga = await http("GET", link + `vaga/0${i}/dono.json`);
+
+        let status = "disponivel";
+
+        if (ocupada === true) status = "ocupada";
+        else if (reservada === true) status = "reservada";
+
+        // ---- CASO SEJA RESERVADA POR OUTRA PESSOA ----
+        const ehDono = donoVaga === dono;
+
+        // ---- MONTA A VAGA ----
+        const spotDiv = document.createElement("div");
+        spotDiv.className = `parking-spot ${status}`;
+
+        spotDiv.innerHTML = `
             <div class="spot-header">
                 ${carIcon}
-                <span class="spot-number">Vaga ${spot.id}</span>
+                <span class="spot-number">Vaga ${i}</span>
             </div>
-            <div class="spot-buttons">
-                <button 
-                    class="btn-reservar" 
-                    onclick="handleReservar(${spot.id})"
-                    ${spot.status !== 'disponivel' ? 'disabled' : ''}
-                >
-                    Reservar
-                </button>
-                <button 
-                    class="btn-liberar" 
-                    onclick="handleLiberar(${spot.id})"
-                    ${spot.status === 'disponivel' ? 'disabled' : ''}
-                >
-                    ${getButtonText(spot.status, spot.liberado)}
-                </button>
+            <div class="spot-buttons" id="btn-area-${i}">
             </div>
-        </div>
-    `).join('');
+        `;
+
+        const btnArea = spotDiv.querySelector(`#btn-area-${i}`);
+
+        // ---- REGRAS ----
+        if (status === "disponivel") {
+            btnArea.innerHTML = `
+                <button class="btn-reservar" onclick="handleReservar(${i})">Reservar</button>
+            `;
+        }
+
+        else if (status === "reservada" && ehDono) {
+            // Dono da vaga pode controlar abrir/fechar
+            btnArea.innerHTML = `
+                <button class="btn-liberar" onclick="handleLiberar(${i})">
+                    ${spots[i-1].liberado ? "Fechar" : "Liberar"}
+                </button>
+            `;
+        }
+
+        // Reservada por outro usuário → nenhum botão
+        else if (status === "reservada" && !ehDono) {
+            btnArea.innerHTML = "";
+        }
+
+        // Ocupada → nada
+        else if (status === "ocupada") {
+            btnArea.innerHTML = "";
+        }
+
+        grid.appendChild(spotDiv);
+    }
+
+    updateStats();
 }
+
 
 // Renderização inicial
 renderSpots();
 
 updateStats();
+
 
 
 
