@@ -13,7 +13,7 @@ function login() {
     firebase.auth().signInWithEmailAndPassword(
         form.email().value, form.password().value
     ).then(() => {
-        sessionStorage.setItem("emaillogado", form.email().value);
+        //sessionStorage.setItem("emaillogado", form.email().value);
         hideLoading();
         window.location.href = "pages/home/home.html";
     }).catch(error => {
@@ -89,3 +89,4 @@ const form = {
     recoverPasswordButton: () => document.getElementById("recover-password-button"),
 
 } 
+
