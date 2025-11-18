@@ -190,25 +190,26 @@ function getButtonText(status, liberado) {
 
 function renderSpots() {
     const grid = document.getElementById('parking-grid');
-
     grid.innerHTML = spots.map(spot => `
         <div class="parking-spot ${spot.status}">
             <div class="spot-header">
                 ${carIcon}
                 <span class="spot-number">Vaga ${spot.id}</span>
             </div>
-
             <div class="spot-buttons">
-                <button class="btn-reservar"
+                <button 
+                    class="btn-reservar" 
                     onclick="handleReservar(${spot.id})"
-                    ${spot.status !== 'disponivel' ? 'disabled' : ''}>
-                        Reservar
+                    ${spot.status !== 'disponivel' ? 'disabled' : ''}
+                >
+                    Reservar
                 </button>
-
-                <button class="btn-liberar"
+                <button 
+                    class="btn-liberar" 
                     onclick="handleLiberar(${spot.id})"
-                    ${spot.status === 'disponivel' ? 'disabled' : ''}>
-                        ${getButtonText(spot.status, spot.liberado)}
+                    ${spot.status === 'disponivel' ? 'disabled' : ''}
+                >
+                    ${getButtonText(spot.status, spot.liberado)}
                 </button>
             </div>
         </div>
@@ -218,3 +219,4 @@ function renderSpots() {
 // Renderização inicial
 renderSpots();
 updateStats();
+
