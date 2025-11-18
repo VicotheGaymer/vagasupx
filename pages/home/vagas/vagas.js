@@ -183,21 +183,23 @@ async function renderSpots() {
     grid.innerHTML = "";
 
     for (let i = 1; i <= 10; i++) {
-
-        // ---- BUSCA DADOS REAIS NO FIREBASE ----
         const reservada = await http("GET", link + `vaga/0${i}/reservada.json`);
         const ocupada = await http("GET", link + `vaga/0${i}/ocupacao.json`);
         const donoVaga = await http("GET", link + `vaga/0${i}/dono.json`);
 
         let status = "disponivel";
+        let ehDono = null;
 
-        if (ocupada === true) status = "ocupada";
-        else if (reservada === true) status = "reservada";
+        if (reservada === true) {
+            status = "reservada";
+        }
 
-        // ---- CASO SEJA RESERVADA POR OUTRA PESSOA ----
-        const ehDono = donoVaga === dono;
+        if (donoVaga === dono) {
+            ehDono = true;
+        }
 
-        // ---- MONTA A VAGA ----
+
+        
         const spotDiv = document.createElement("div");
         spotDiv.className = `parking-spot ${status}`;
 
@@ -240,8 +242,6 @@ async function renderSpots() {
 
         grid.appendChild(spotDiv);
     }
-
-    updateStats();
 }
 
 
@@ -249,6 +249,7 @@ async function renderSpots() {
 renderSpots();
 
 updateStats();
+
 
 
 
