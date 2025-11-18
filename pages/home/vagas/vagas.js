@@ -1,4 +1,4 @@
-const dono = sessionStorage.getItem("emailLogado");
+const dono = sessionStorage.getItem("emaillogado");
 //----------------------------------------------------------------------------------
 
 const link = "https://vagas-fb9c4-default-rtdb.firebaseio.com/";
@@ -22,13 +22,15 @@ function log(msg)
 async function funcaoexecutar(id) {
     try {
         const urlGet = link + 'vaga/0' + id + '/reservada.json';
+        const urlDono = link + 'vaga/0' + id + '/dono.json';
         const atual = await http("GET", urlGet);
         if (atual === true) {
-        console.log("vaga ja reservada");
-        return;
+            console.log("vaga ja reservada");
+            return;
         }
         const urlPatch = link + 'vaga/0' + id + '/reservada.json';
         await http("PUT", urlPatch, true);
+        await http("PUT", urlDono, dono);
         console.log("reserva feita com sucesso");
     } catch (e) {
         console.log("erro ao fazer reserva: " + e.message);
@@ -204,6 +206,7 @@ function renderSpots() {
 renderSpots();
 
 updateStats();
+
 
 
 
